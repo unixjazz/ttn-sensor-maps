@@ -1,11 +1,15 @@
+// TTN-sensor-map
+// Written by Jan Jongboom and Johan Stokking
+// See LICENSE for details
+
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
 const hbs = require('hbs');
 const ttn = require('ttn');
 const fs = require('fs');
 const Path = require('path');
+const io = require('socket.io')(server);
 
 // improved database
 const dbFile = Path.join(__dirname, 'db.json');
@@ -26,9 +30,9 @@ let devices = {};
 // Note here what data you're interested in, and how it can be obtained from a payload message
 const config = {
     // Replace this with your own key
-    mapsApiKey: 'AIzaSyBVHcLKC3ja-ZCsyWQLe0eBB3q28F7V6X0',
+    mapsApiKey: 'ADD_YOUR_KEY',
 
-    title: 'Temperature monitor',
+    title: 'Smart Cville AQ sensor network',
     dataMapping: {
         temperature: {
             graphTitle: 'Temperature',
@@ -36,13 +40,45 @@ const config = {
             minY: 0, // suggested numbers, if numbers out of this range are received the graph will adjust
             maxY: 50,
             numberOfEvents: 30, // no. of events we send to the client
-            data: payload => payload.payload_fields.temperature_1
+            data: payload => payload.payload_fields.temp
+        },
+        co2 : {
+            graphTitle: 'CO2',
+            yAxisLabel: 'CO2 (ppm)',
+            minY: 0, // suggested numbers, if numbers out of this range are received the graph will adjust
+            maxY: 5000,
+            numberOfEvents: 30, // no. of events we send to the client
+            data: payload => payload.payload_fields.co2
+        },
+        pm25: {
+            graphTitle: 'Particulate Matter (2.5)',
+            yAxisLabel: 'PM (2.5)',
+            minY: 0, // suggested numbers, if numbers out of this range are received the graph will adjust
+            maxY: 100,
+            numberOfEvents: 30, // no. of events we send to the client
+            data: payload => payload.payload_fields.pm25
+        },
+        pm10: {
+            graphTitle: 'Particulate Matter (10)',
+            yAxisLabel: 'PM(10)',
+            minY: 0, // suggested numbers, if numbers out of this range are received the graph will adjust
+            maxY: 100,
+            numberOfEvents: 30, // no. of events we send to the client
+            data: payload => payload.payload_fields.pm10
+        },
+        humidity: {
+            graphTitle: 'Humidity',
+            yAxisLabel: 'Humidity (%)',
+            minY: 0, // suggested numbers, if numbers out of this range are received the graph will adjust
+            maxY: 100,
+            numberOfEvents: 30, // no. of events we send to the client
+            data: payload => payload.payload_fields.humidity
         },
         // want more properties? just add more objects here
     },
     mapCenter: {
-        lat: 30.2672,
-        lng: -97.7341
+        lat: 38.029341,
+        lng: -78.476682
     }
 };
 
@@ -123,8 +159,8 @@ io.on('connection', socket => {
     });
 });
 
-server.listen(process.env.PORT || 7270, process.env.HOST || '0.0.0.0', function () {
-    console.log('Web server listening on port %s!', process.env.PORT || 7270);
+server.listen(process.env.PORT || 7270, process.env.HOST || 'data.unixjazz.org', function () {
+  console.log('Web server listening on host %s!', process.env.PORT || 7270);
 });
 
 function connectApplication(appId, accessKey) {
@@ -170,18 +206,61 @@ function connectApplication(appId, accessKey) {
 
                 let key = appId + ':' + devId;
                 let d = devices[key] = devices[key] || {};
-                d.eui = payload.hardware_serial;
+                d.eui = devId;
 
                 for (let mapKey of Object.keys(dataMapping)) {
                     d[mapKey] = d[mapKey] || [];
                 }
 
-                if (!d.lat) {
-                    d.lat = mapCenter.lat + (Math.random() / 10 - 0.05);
-                }
-                if (!d.lng) {
-                    d.lng = mapCenter.lng + (Math.random() / 10 - 0.05);
-                }
+		// FIXME: provide coordinates from the node src
+		switch (devId) {
+		    case "sbox2":
+    		        d.lat = 38.026;
+                        d.lng = -78.501;
+			break;
+		    case "sbox3":
+    		        d.lat = 38.019;
+                        d.lng = -78.473;
+			break;
+		    case "sbox4":
+    		        d.lat = 38.047;
+                        d.lng = -78.483;
+			break;
+		    case "sbox5":
+    		        d.lat = 38.035;
+                        d.lng = -78.491;
+			break;
+		    case "sbox6":
+    		        d.lat = 38.027;
+                        d.lng = -78.515;
+			break;
+		    case "sbox7":
+    		        d.lat = 38.025;
+                        d.lng = -78.516;
+			break;
+		    case "sbox8":
+    		        d.lat = 38.029;
+                        d.lng = -78.484;
+			break;
+		    case "sbox9":
+    		        d.lat = 38.025;
+                        d.lng = -78.469;
+			break;
+		    case "sbox10":
+    		        d.lat = 38.031;
+                        d.lng = -78.479;
+			break;
+		    case "sbox11":
+    		        d.lat = 38.029;
+                        d.lng = -78.484;
+			break;
+	        }	
+		//if (!d.lat) {
+                //    d.lat = mapCenter.lat + (Math.random() / 10 - 0.05);
+                //}
+                //if (!d.lng) {
+                //    d.lng = mapCenter.lng + (Math.random() / 10 - 0.05);
+                //}
 
                 for (let mapKey of Object.keys(dataMapping)) {
                     let v;

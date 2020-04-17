@@ -2,26 +2,15 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>LoRaWAN sensor map - {{title}}</title>
+  <title>Smart Cville - School of Data Science: AQ sensor map</title>
   <link rel="stylesheet" href="/style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <!-- Powered by https://github.com/janjongboom/ttn-sensor-map -->
 </head>
 
 <body>
-  <div id="header">
-    <a target="_blank" href="https://os.mbed.com"><img class="logo" src="/ARMmbedLogo.svg"></a>
-    <a target="_blank" href="https://www.thethingsnetwork.org/"><img class="logo" src="/ttnlogo.png"></a>
-    <a target="_blank" href="https://www.multitech.com/"><img class="logo" src="/mtlogo.png"></a>
-  </div>
-
   <div class="title">
     <h1>{{title}}</h1>
-
-    <div class="connect">
-      <input type="text" id="appId" placeholder="Your app ID">
-      <button onclick="connectApplication()">Connect</button>
-    </div>
   </div>
 
   <div id="map"></div>

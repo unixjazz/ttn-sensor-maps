@@ -1,18 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
-#header {
-  margin-top: 20px;
-  height: 20px;
-  clear: both;
-}
-.logo {
-  height: 20px;
-  margin: 0 20px;
-  float: right;
-}
 body {
   margin: 0;
-  padding: 0 20px;
+  padding: 10px 20px;
+  background: #0091BD;
 }
 body, input, button {
   font-family: "Lato", sans-serif;
@@ -27,17 +18,10 @@ h1 {
   margin: 0;
 }
 .title {
-  background: linear-gradient(45deg, #0091BD, #002B49);
+  background: #0091BD;
   color: white;
-  margin: 20px -20px;
-  padding: 20px 20px;
-}
-.connect {
-  float: right;
-}
-.connect button, .connect input {
-  font-size: 16px;
-  padding: 4px;
+  margin: 0px -20px;
+  padding: 40px 40px;
 }
 a {
   color: #0091BD;
@@ -82,26 +66,12 @@ h2 {
 }
 
 #map {
-  width: calc(100% + 40px);
-  height: calc(100vh - 134px);
-  margin: -20px;
+  width: calc(100%);
+  height: calc(100vh - 140px);
 }
 
 .eui {
   text-align: center;
 }
 
-@media(max-width: 600px) {
-  #header {
-    height: 16px;
-  }
-  .logo {
-    height: 16px;
-    margin: 0 8px;
-    float: right;
-  }
-  .connect {
-    display: none;
-  }
-}
-
+@media(max-width: 600px)

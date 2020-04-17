@@ -1,6 +1,6 @@
 function initMap() {
     var map = new google.maps.Map(document.querySelector('#map'), {
-        zoom: 12,
+        zoom: 14,
         center: config.mapCenter
     });
 
@@ -8,7 +8,7 @@ function initMap() {
         var marker = new google.maps.Marker({
             position: { lat: device.lat, lng: device.lng },
             map: map,
-            title: device.appId + ': ' + device.eui,
+            title: device.devId,
             draggable: true
         });
 
